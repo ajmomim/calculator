@@ -31,12 +31,12 @@
             padding: 10px;
             box-sizing: border-box;
             border-radius: 5px;
-            border: 1px solid #fda8a8;
+            border: 1px solid #f88383;
         }
 
         .buttons {
             display: grid;
-            grid-template-columns: repeat(6, 1fr); /* 6 columns instead of 4 */
+            grid-template-columns: repeat(6, 1fr);
             gap: 10px;
         }
 
@@ -46,7 +46,7 @@
             border-radius: 5px;
             border: none;
             cursor: pointer;
-            background-color: #027106;
+            background-color: #1daa21;
             color: rgb(252, 167, 167);
             transition: background-color 0.3s ease;
         }
@@ -112,7 +112,7 @@
         </div>
     </div>
     <script>
-        let angleMode = 'deg'; // Default to degrees
+        let angleMode = 'deg';
 
         function clearDisplay() {
             document.getElementById('display').value = '';
@@ -145,7 +145,11 @@
             if (func === 'Math.pow') {
                 display.value += '**';
             } else {
-                display.value = func + '(' + display.value + (power !== undefined ? ',' + power : '') + ')';
+                if (['Math.sin', 'Math.cos', 'Math.tan'].includes(func) && angleMode === 'deg') {
+                    display.value = func + '(' + (display.value * (Math.PI / 180)) + (power !== undefined ? ',' + power : '') + ')';
+                } else {
+                    display.value = func + '(' + display.value + (power !== undefined ? ',' + power : '') + ')';
+                }
             }
         }
 
@@ -163,11 +167,6 @@
             const display = document.getElementById('display');
             try {
                 let result = eval(display.value);
-
-                if (angleMode === 'deg') {
-                    result = result * (Math.PI / 180); // Convert to radians if in degree mode
-                }
-
                 display.value = result;
             } catch (error) {
                 display.value = 'Error';
